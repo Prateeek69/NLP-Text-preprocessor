@@ -38,7 +38,10 @@ function App() {
       const formData = new FormData();
       formData.append("text", text);
 
-      const res = await axios.post("http://localhost:8000/predict-text", formData);
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_BASE_URL}/predict-text`,
+        formData
+      );
       setProcessedText(res.data);
       notify("Text processed successfully!");
     } catch (err) {
