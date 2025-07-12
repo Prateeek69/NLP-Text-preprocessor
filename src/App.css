@@ -1,38 +1,110 @@
-.App {
+body, html, #root, .App {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: black;
+  color: white;
+  font-family: sans-serif;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  background-color: #1e1e1e;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 600px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+textarea {
+  width: 100%;
+  height: 100px;
+  margin-top: 1rem;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  resize: vertical;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+button {
+  margin-top: 1rem;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #4caf50;
   color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.App-link {
-  color: #61dafb;
+button:hover {
+  background-color: #45a049;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.dropzone {
+  margin-top: 2rem;
+  padding: 20px;
+  border: 2px dashed #aaa;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.dropzone.active {
+  background-color: #333;
+  border-color: #4caf50;
+}
+
+.upload-button {
+  display: inline-block;
+  margin-top: 10px;
+  background-color: #1976d2;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.upload-button:hover {
+  background-color: #1565c0;
+}
+
+.response, .file-status {
+  margin-top: 1rem;
+  background: #333;
+  padding: 10px;
+  border-radius: 5px;
+  white-space: pre-wrap;
+  text-align: left;
+}
+
+.file-name {
+  margin-top: 10px;
+  color: #aaa;
+  font-style: italic;
+}
+
+.download-btn {
+  margin-top: 1rem;
+  padding: 10px 20px;
+  background-color: #ff9800;
+  color: black;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.download-btn:hover {
+  background-color: #fb8c00;
+}
+
+.uploaded-file {
+  margin-top: 1rem;
+  padding: 10px;
+  background-color: #424242;
+  border-radius: 5px;
+  color: #fff;
 }
