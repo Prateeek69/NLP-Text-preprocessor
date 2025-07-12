@@ -1,120 +1,126 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import { ClipLoader } from 'react-spinners';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 
 function App() {
   const [inputText, setInputText] = useState('');
-  const [textResponse, setTextResponse] = useState('');
   const [fileName, setFileName] = useState('');
-  const [processedBlob, setProcessedBlob] = useState(null);
+  const [rawFileText, setRawFileText] = useState('');
+  const [processedText, setProcessedText] = useState('');
+  const [loading, setLoading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
 
-  const handleTextSubmit = async () => {
+  const notify = (msg, type = "info") =>
+    toast[msg.includes("error") || type === "error" ? "error" : "success"](msg);
+
+  const processText = async (text) => {
+    setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("text", inputText);
+      formData.append("text", text);
 
       const res = await axios.post("http://localhost:8000/predict-text", formData);
-      setTextResponse(res.data);
+      setProcessedText(res.data);
+      notify("Text processed successfully!");
     } catch (err) {
-      alert("Error processing text input.");
+      notify("Text processing error!", "error");
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleTextSubmit = () => {
+    if (!inputText.trim()) return notify("Text is empty!", "error");
+    setRawFileText(inputText);
+    setFileName('Text input');
+    processText(inputText);
   };
 
   const handleFileUpload = async (file) => {
+    if (!file || file.type !== "text/plain") return notify("Only .txt files allowed", "error");
+
     setFileName(file.name);
-
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await axios.post("http://localhost:8000/predict-file", formData, {
-        responseType: 'blob',
-      });
-
-      setProcessedBlob(new Blob([res.data], { type: "text/plain" }));
-    } catch (err) {
-      alert("Error processing file.");
-    }
-  };
-
-  const handleDrag = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(e.type === "dragenter" || e.type === "dragover");
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const text = e.target.result;
+      setRawFileText(text);
+      await processText(text);
+    };
+    reader.readAsText(file);
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
-    e.stopPropagation();
     setDragActive(false);
-
     const file = e.dataTransfer.files[0];
-    if (file && file.type === "text/plain") {
-      handleFileUpload(file);
-    } else {
-      alert("Only .txt files are allowed.");
-    }
+    handleFileUpload(file);
   };
 
-  const triggerFileSelect = () => {
-    document.getElementById('fileUpload').click();
+  const handleDrag = (e) => {
+    e.preventDefault();
+    setDragActive(e.type === "dragenter" || e.type === "dragover");
   };
 
-  const handleManualSelect = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type === "text/plain") {
-      handleFileUpload(file);
-    } else {
-      alert("Only .txt files are allowed.");
-    }
-  };
-
-  const downloadProcessedFile = () => {
-    const url = URL.createObjectURL(processedBlob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "preprocessed_text_output.txt";
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-  };
+  const triggerFileSelect = () => document.getElementById('fileUpload').click();
 
   return (
-    <div className="App" onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}>
+    <div className="App" onDragEnter={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}>
+      <ToastContainer />
       <div className="box">
         <h2>Text Preprocessor</h2>
 
-        {/* Text input section */}
+        {/* Text input */}
         <textarea
           placeholder="Enter raw text..."
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
         />
-        <button onClick={handleTextSubmit}>Submit Text</button>
-        {textResponse && <pre className="response">{textResponse}</pre>}
+        <button onClick={handleTextSubmit} disabled={loading}>
+          {loading ? <ClipLoader size={15} color="#fff" /> : "Submit Text"}
+        </button>
 
+        {/* OR drop/upload file */}
         <hr />
-
-        {/* File upload section */}
-        <div className={`dropzone ${dragActive ? 'active' : ''}`} onClick={triggerFileSelect}>
-          <p>Drag & drop your `.txt` file here</p>
-          <p>(or click to select a file)</p>
+        <div
+          className={`dropzone ${dragActive ? 'active' : ''}`}
+          onClick={triggerFileSelect}
+        >
+          <p>Drag & Drop your `.txt` file here or click to upload</p>
           <input
             type="file"
             accept=".txt"
-            onChange={handleManualSelect}
+            onChange={(e) => handleFileUpload(e.target.files[0])}
             style={{ display: 'none' }}
             id="fileUpload"
           />
         </div>
 
-        {fileName && <p className="file-name">Uploaded: {fileName}</p>}
+        {/* File name */}
+        {fileName && <p className="file-name">File: {fileName}</p>}
 
-        {processedBlob && (
-          <button className="download-btn" onClick={downloadProcessedFile}>
-            Download Processed File
-          </button>
+        {/* Loading Spinner */}
+        {loading && (
+          <div className="loading">
+            <ClipLoader size={40} color="#ff9800" />
+            <p>Processing...</p>
+          </div>
+        )}
+
+        {/* Output section */}
+        {(rawFileText || processedText) && (
+          <div className="results">
+            <div>
+              <h4>🔹 Raw Input</h4>
+              <pre>{rawFileText}</pre>
+            </div>
+            <div>
+              <h4>✅ Processed Output</h4>
+              <pre>{processedText}</pre>
+            </div>
+          </div>
         )}
       </div>
     </div>
