@@ -4,7 +4,7 @@
 
 .App {
   height: 100vh;
-  overflow: hidden;
+  overflow-y: auto;
   background: linear-gradient(135deg, #629ef2, #8f88ebbb);
   color: #eee;
   font-family: 'Arial', sans-serif;
@@ -110,6 +110,35 @@ button:disabled {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+.top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #433af1;
+  color: #fff;
+  padding: 10px 20px;
+  text-align: left;
+  font-size: 20px;
+  font-family: monospace;
+  z-index: 1000;
+}
+
+.github-link {
+  color: #fff;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.github-link:hover {
+  text-decoration: underline;
+}
+
+.github-link i {
+  font-size: 19px;
 }
 
 .actions {

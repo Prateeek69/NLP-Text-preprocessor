@@ -87,6 +87,17 @@ function App() {
 
   return (
     <div className="App" onDragEnter={handleDrag} onDragOver={handleDrag} onDrop={handleDrop}>
+      <div className="top-bar">
+        <a
+          href="https://github.com/Prateeek69"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="github-link"
+        >
+          <i className="fab fa-github"></i>Prateeek69
+        </a>
+      </div>
+
       <ToastContainer />
       <div className="box">
         <h2>Text Preprocessor</h2>
