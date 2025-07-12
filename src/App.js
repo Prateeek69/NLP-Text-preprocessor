@@ -4,6 +4,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { ClipLoader } from 'react-spinners';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
+import { FaRegClipboard, FaDownload } from 'react-icons/fa';
+
 
 function App() {
   const [inputText, setInputText] = useState('');
@@ -14,7 +16,21 @@ function App() {
   const [dragActive, setDragActive] = useState(false);
 
   const notify = (msg, type = "info") =>
-    toast[msg.includes("error") || type === "error" ? "error" : "success"](msg);
+      toast[msg.includes("error") || type === "error" ? "error" : "success"](msg);
+    const downloadFile = () => {
+    const blob = new Blob([processedText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'processed_output.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(processedText);
+    notify("Output copied to clipboard!");
+  };
 
   const processText = async (text) => {
     setLoading(true);
@@ -78,9 +94,12 @@ function App() {
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
         />
-        <button onClick={handleTextSubmit} disabled={loading}>
+        
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "1rem" }}>
+          <button onClick={handleTextSubmit} disabled={loading}>
           {loading ? <ClipLoader size={15} color="#fff" /> : "Submit Text"}
         </button>
+        </div>
 
         {/* OR drop/upload file */}
         <hr />
@@ -113,15 +132,24 @@ function App() {
         {(rawFileText || processedText) && (
           <div className="results">
             <div>
-              <h4>🔹 Raw Input</h4>
+              <h4>Raw Input</h4> 
               <pre>{rawFileText}</pre>
             </div>
             <div>
-              <h4>✅ Processed Output</h4>
+              <div className="output-header">
+                  <strong>Processed Output</strong>
+                  <div className="icon-row">
+                    <FaRegClipboard className="icon" onClick={copyToClipboard} title="Copy to clipboard" />
+                    {fileName !== 'Text input' && (
+                      <FaDownload className="icon" onClick={downloadFile} title="Download as file" />
+                    )}
+                  </div>
+                </div>
               <pre>{processedText}</pre>
             </div>
           </div>
         )}
+
       </div>
     </div>
   );
