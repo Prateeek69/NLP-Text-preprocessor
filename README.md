@@ -10,16 +10,30 @@ A full-stack machine learning web application that allows users to upload or pas
 
 ## 🚀 Features
 
-- 📄 Upload `.txt` files or paste raw text
-- ⚙️ Processes text using a deep learning model (`.keras`) trained with:
-  - Emoji handling
-  - Slang expansion
-  - TextBlob + NLTK cleaning
-- 🔄 Displays both raw and processed text side-by-side
-- 📋 Copy processed text or ⬇️ download as file
-- ⚡ Drag-and-drop support
-- 🔄 Live loading spinner & toast notifications
-- 🧑‍💻 GitHub link in UI for quick source access
+- 📄 Upload `.txt` files or paste raw text  
+- 🔄 Displays both raw and processed text side-by-side  
+- 📋 Copy processed text or ⬇️ download as file  
+- ⚡ Drag-and-drop support  
+- 🔄 Live loading spinner & toast notifications  
+- 🧑‍💻 GitHub link in UI for quick source access  
+
+---
+
+## 🧹 Preprocessing Pipeline (Model)
+
+⚙️ All text is processed using a Keras `.keras` model trained with:
+
+- 🧠 **Emoji Handling**  
+- 💬 **Slang Expansion**  
+- 📝 **Spelling Correction** via TextBlob  
+- ✂️ **Stop Word Removal** using NLTK  
+- 🔗 **URL Removal**  
+- 🧼 **HTML Tag Stripping**  
+- ❌ **Punctuation Removal**  
+- 🔠 **Lowercasing**  
+- 📏 **Extra Whitespace Cleanup**
+
+> Text is cleaned and standardized before returning it in real-time.
 
 ---
 
@@ -57,3 +71,5 @@ Don't forget to add this to Vercel's Environment Variables tab for deployments!
 npm install
 npm start
 ```
+## 👨‍💻 Author  
+Made by [Prateeek69](https://github.com/Prateeek69) 😼
