@@ -7,7 +7,9 @@ A full-stack machine learning web application that allows users to upload or pas
 ![Deployment](https://img.shields.io/badge/deployed-Vercel%20%26%20Render-purple.svg)
 
 ---
+What is NLP text pre-processing : https://medium.com/@prateeek44/from-raw-text-to-ready-data-text-preprocessing-in-nlp-1608e08f750b
 
+---
 ## 🚀 Features
 
 - 📄 Upload `.txt` files or paste raw text  
